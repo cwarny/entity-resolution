@@ -1,0 +1,118 @@
+# -*- coding: utf-8 -*-
+
+###############################################################################
+#
+# Get
+# Gets a file's metadata and content by ID.
+#
+# Python version 2.6
+#
+###############################################################################
+
+from temboo.core.choreography import Choreography
+from temboo.core.choreography import InputSet
+from temboo.core.choreography import ResultSet
+from temboo.core.choreography import ChoreographyExecution
+from temboo.outputs.Google.Drive.GoogleFile import GoogleFile
+
+import json
+
+class Get(Choreography):
+
+    def __init__(self, temboo_session):
+        """
+        Create a new instance of the Get Choreo. A TembooSession object, containing a valid
+        set of Temboo credentials, must be supplied.
+        """
+        Choreography.__init__(self, temboo_session, '/Library/Google/Drive/Files/Get')
+
+
+    def new_input_set(self):
+        return GetInputSet()
+
+    def _make_result_set(self, result, path):
+        return GetResultSet(result, path)
+
+    def _make_execution(self, session, exec_id, path):
+        return GetChoreographyExecution(session, exec_id, path)
+
+class GetInputSet(InputSet):
+    """
+    An InputSet with methods appropriate for specifying the inputs to the Get
+    Choreo. The InputSet object is used to specify input parameters when executing this Choreo.
+    """
+    def set_AccessToken(self, value):
+        """
+        Set the value of the AccessToken input for this Choreo. ((optional, string) A valid access token retrieved during the OAuth2 process. This is required unless you provide the ClientID, ClientSecret, and RefreshToken to generate a new access token.)
+        """
+        InputSet._set_input(self, 'AccessToken', value)
+    def set_ClientID(self, value):
+        """
+        Set the value of the ClientID input for this Choreo. ((conditional, string) The Client ID provided by Google. Required unless providing a valid AccessToken.)
+        """
+        InputSet._set_input(self, 'ClientID', value)
+    def set_ClientSecret(self, value):
+        """
+        Set the value of the ClientSecret input for this Choreo. ((conditional, string) The Client Secret provided by Google. Required unless providing a valid AccessToken.)
+        """
+        InputSet._set_input(self, 'ClientSecret', value)
+    def set_ExportFormat(self, value):
+        """
+        Set the value of the ExportFormat input for this Choreo. ((optional, string) Indicates the download format (i.e. pdf, doc, txt, rtf, odt, etc). When specified, the FileContent output will contain the file's base64 encoded value.)
+        """
+        InputSet._set_input(self, 'ExportFormat', value)
+    def set_Fields(self, value):
+        """
+        Set the value of the Fields input for this Choreo. ((optional, string) Selector specifying a subset of fields to include in the response.)
+        """
+        InputSet._set_input(self, 'Fields', value)
+    def set_FileID(self, value):
+        """
+        Set the value of the FileID input for this Choreo. ((required, string) The ID of the file to retrieve.)
+        """
+        InputSet._set_input(self, 'FileID', value)
+    def set_RefreshToken(self, value):
+        """
+        Set the value of the RefreshToken input for this Choreo. ((conditional, string) An OAuth refresh token used to generate a new access token when the original token is expired. Required unless providing a valid AccessToken.)
+        """
+        InputSet._set_input(self, 'RefreshToken', value)
+    def set_UpdateViewDate(self, value):
+        """
+        Set the value of the UpdateViewDate input for this Choreo. ((optional, boolean) Whether to update the view date after successfully retrieving the file. Default value is false.)
+        """
+        InputSet._set_input(self, 'UpdateViewDate', value)
+
+class GetResultSet(ResultSet):
+    """
+    A ResultSet with methods tailored to the values returned by the Get Choreo.
+    The ResultSet object is used to retrieve the results of a Choreo execution.
+    """
+    		
+    def getJSONFromString(self, str):
+        return json.loads(str)
+    
+    def get_FileContent(self):
+        """
+        Retrieve the value for the "FileContent" output from this Choreo execution. ((string) The Base64 encoded file content.)
+        """
+        return self._output.get('FileContent', None)
+    def get_FileMetadata(self):
+        """
+        Retrieve the value for the "FileMetadata" output from this Choreo execution. ((json) The file metadata returned in the response from Google.)
+        """
+        return self._output.get('FileMetadata', None)
+    def get_NewAccessToken(self):
+        """
+        Retrieve the value for the "NewAccessToken" output from this Choreo execution. ((string) Contains a new AccessToken when the RefreshToken is provided.)
+        """
+        return self._output.get('NewAccessToken', None)
+    def getFile(self):
+        """
+        A Google Drive file resource
+        """
+        return GoogleFile(self.getJSONFromString(self._output.get('FileMetadata', [])))
+
+class GetChoreographyExecution(ChoreographyExecution):
+    
+    def _make_result_set(self, response, path):
+        return GetResultSet(response, path)

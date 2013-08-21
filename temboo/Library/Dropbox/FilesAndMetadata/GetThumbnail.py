@@ -1,0 +1,102 @@
+# -*- coding: utf-8 -*-
+
+###############################################################################
+#
+# GetThumbnail
+# Retrieves a thumbnail for a specified image.
+#
+# Python version 2.6
+#
+###############################################################################
+
+from temboo.core.choreography import Choreography
+from temboo.core.choreography import InputSet
+from temboo.core.choreography import ResultSet
+from temboo.core.choreography import ChoreographyExecution
+
+import json
+
+class GetThumbnail(Choreography):
+
+    def __init__(self, temboo_session):
+        """
+        Create a new instance of the GetThumbnail Choreo. A TembooSession object, containing a valid
+        set of Temboo credentials, must be supplied.
+        """
+        Choreography.__init__(self, temboo_session, '/Library/Dropbox/FilesAndMetadata/GetThumbnail')
+
+
+    def new_input_set(self):
+        return GetThumbnailInputSet()
+
+    def _make_result_set(self, result, path):
+        return GetThumbnailResultSet(result, path)
+
+    def _make_execution(self, session, exec_id, path):
+        return GetThumbnailChoreographyExecution(session, exec_id, path)
+
+class GetThumbnailInputSet(InputSet):
+    """
+    An InputSet with methods appropriate for specifying the inputs to the GetThumbnail
+    Choreo. The InputSet object is used to specify input parameters when executing this Choreo.
+    """
+    def set_AccessTokenSecret(self, value):
+        """
+        Set the value of the AccessTokenSecret input for this Choreo. ((required, string) The Access Token Secret retrieved during the OAuth process.)
+        """
+        InputSet._set_input(self, 'AccessTokenSecret', value)
+    def set_AccessToken(self, value):
+        """
+        Set the value of the AccessToken input for this Choreo. ((required, string) The Access Token retrieved during the OAuth process.)
+        """
+        InputSet._set_input(self, 'AccessToken', value)
+    def set_AppKey(self, value):
+        """
+        Set the value of the AppKey input for this Choreo. ((required, string) The App Key provided by Dropbox (AKA the OAuth Consumer Key).)
+        """
+        InputSet._set_input(self, 'AppKey', value)
+    def set_AppSecret(self, value):
+        """
+        Set the value of the AppSecret input for this Choreo. ((required, string) The App Secret provided by Dropbox (AKA the OAuth Consumer Secret).)
+        """
+        InputSet._set_input(self, 'AppSecret', value)
+    def set_ImageFormat(self, value):
+        """
+        Set the value of the ImageFormat input for this Choreo. ((optional, string) The thumbnail format to return for the specified image. Accepted values are: jpeg (default) or png.)
+        """
+        InputSet._set_input(self, 'ImageFormat', value)
+    def set_Path(self, value):
+        """
+        Set the value of the Path input for this Choreo. ((required, string) The path to the file that you want to generate a thumbnail for (i.e. RootFolder/SubFolder/MyFile.txt).)
+        """
+        InputSet._set_input(self, 'Path', value)
+    def set_Root(self, value):
+        """
+        Set the value of the Root input for this Choreo. ((conditional, string) The root relative to which path is specified. Valid values are "sandbox" and "dropbox" (the default). When your access token has the App folder level of access, this should be set to "sandbox".)
+        """
+        InputSet._set_input(self, 'Root', value)
+    def set_Size(self, value):
+        """
+        Set the value of the Size input for this Choreo. ((optional, string) The size of the thumbnail to generate. Accepted values are: small, medium, s, m, l, xl. See Choreo documentation for exact dimensions. Defaults to "small".)
+        """
+        InputSet._set_input(self, 'Size', value)
+
+class GetThumbnailResultSet(ResultSet):
+    """
+    A ResultSet with methods tailored to the values returned by the GetThumbnail Choreo.
+    The ResultSet object is used to retrieve the results of a Choreo execution.
+    """
+    		
+    def getJSONFromString(self, str):
+        return json.loads(str)
+    
+    def get_Response(self):
+        """
+        Retrieve the value for the "Response" output from this Choreo execution. ((string) The base64 encoded image content of the thumbnail.)
+        """
+        return self._output.get('Response', None)
+
+class GetThumbnailChoreographyExecution(ChoreographyExecution):
+    
+    def _make_result_set(self, response, path):
+        return GetThumbnailResultSet(response, path)
