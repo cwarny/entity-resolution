@@ -2,7 +2,7 @@
 
 This document describes a basic Python-based implementation of a system to ID people across the main online social networks (Facebook, LinkedIn, Twitter, Google +). The goal is to be able to tell that the same real-life person (“entity”) is behind different profiles on different social networks.
 
-The system gathers candidate profiles from the different OSNs and compare profile attributes (more on profile attributes in the attached Excel spreadsheet). If enough attribute profiles match, the profiles are assumed to represent the same entity. The matching tests conducted between two profiles will depend on what profile attributes overlap.
+The system gathers candidate profiles from the different OSNs and compare profile attributes. If enough attribute profiles match, the profiles are assumed to represent the same entity. The matching tests conducted between two profiles will depend on what profile attributes overlap.
 
 Finally, a graph is progressively built, linking matching profiles. Candidate entities consist in paths of this graph linking profiles together and are ranked according to the average strength of the links along their path.
 
