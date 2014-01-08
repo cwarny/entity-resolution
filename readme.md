@@ -2,7 +2,7 @@
 
 This document describes a basic Python-based implementation of a system to ID people across the main online social networks (Facebook, LinkedIn, Twitter, Google +). The goal is to be able to tell that the same real-life person (“entity”) is behind different profiles on different social networks.
 
-The system gathers candidate profiles from the different OSNs and compare profile attributes. If enough attribute profiles match, the profiles are assumed to represent the same entity. The matching tests conducted between two profiles will depend on what profile attributes overlap.
+The system gathers candidate profiles from the different OSNs and compares profile attributes. If enough attribute profiles match, the profiles are assumed to represent the same entity. The matching tests conducted between two profiles will depend on what profile attributes overlap.
 
 Finally, a graph is progressively built, linking matching profiles. Candidate entities consist in paths of this graph linking profiles together and are ranked according to the average strength of the links along their path.
 
@@ -53,7 +53,7 @@ The matching tests and rules vary in function of what attribute is under conside
 
 The way the similarity score is adjusted depends on the attribute under consideration as well. A matching e-mail is very positively informative and will therefore substantially increase the score. Adjustments to the score can also be negative. A non-matching gender is very informative and will result in a sharp decrease in the matching score, while a non-matching job will have less impact (though still a negative impact).
 
-### Matching tests and rules
+#### Matching tests and rules
 
 <table>
     <tr>
@@ -75,14 +75,14 @@ The way the similarity score is adjusted depends on the attribute under consider
         <td>String similarity</td>
         <td>0.7</td>
         <td>+1</td>
-        <td>Foo</td>
+        <td></td>
     </tr>
     <tr>
         <td>E-mail</td>
         <td>Equality</td>
         <td></td>
         <td>+8</td>
-        <td>Foo</td>
+        <td></td>
     </tr>
     <tr>
         <td>Location 1 (free-text location)</td>
